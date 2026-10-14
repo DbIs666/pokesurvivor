@@ -1,0 +1,11 @@
+---
+import ContentPage from '../components/ContentPage.astro';
+import Pokedex from '../components/Pokedex.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { DEX } from '../data/dex';
+---
+<ContentPage locale="en" routeKey="pokedex">
+  <JsonLd slot="head" type="ItemList" locale="en" name="All 966 playable Pokémon in PokeSurvivor"
+    items={DEX.map((p) => ({ name: p.name.en, image: p.sprite }))} ordered={false} />
+  <Pokedex locale="en" />
+</ContentPage>

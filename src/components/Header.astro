@@ -1,0 +1,47 @@
+---
+import { NAV, UI, ROUTES, LOCALES, LOCALE_LABEL, LANG_TAG, pathFor, type Locale, type RouteKey } from '../i18n';
+import { SITE_NAME } from '../config';
+
+interface Props { locale: Locale; routeKey?: RouteKey }
+const { locale, routeKey } = Astro.props;
+const t = UI[locale];
+const current = Astro.url.pathname;
+// Language switcher: counterpart page if it exists, else that locale's home.
+const switchTargets = LOCALES.filter((l) => l !== locale).map((l) => ({
+  locale: l,
+  href: (routeKey && pathFor(routeKey, l)) ?? ROUTES.home[l]!,
+}));
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={ROUTES.home[locale]}>{SITE_NAME}</a>
+    <details class="nav-toggle">
+      <summary>{t.menu}</summary>
+      <nav aria-label={t.mainNav}>
+        <ul class="nav-list">
+          {NAV[locale].map((key) => {
+            const href = pathFor(key, locale)!;
+            return (
+              <li>
+                <a href={href} aria-current={current === href ? 'page' : undefined}>{t.nav[key]}</a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </details>
+    <nav class="lang-switch" aria-label={t.langSwitch}>
+      {switchTargets.map((s) => (
+        <a href={s.href} hreflang={LANG_TAG[s.locale]} lang={LANG_TAG[s.locale]}>{LOCALE_LABEL[s.locale]}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+<script>
+  // Keep the nav expanded on wide screens (CSS hides the summary there).
+  const d = document.querySelector<HTMLDetailsElement>('.nav-toggle');
+  const mq = window.matchMedia('(min-width: 48rem)');
+  const sync = () => { if (d) d.open = mq.matches; };
+  sync();
+  mq.addEventListener('change', sync);
+</script>

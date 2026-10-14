@@ -1,0 +1,27 @@
+---
+import { UI, NAV, pathFor, type Locale } from '../i18n';
+import { GAME, SITE_NAME } from '../config';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = UI[locale];
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <nav aria-label={t.footerGuides}>
+      <ul class="footer-links">
+        {NAV[locale].filter((k) => k !== 'home').map((k) => (
+          <li><a href={pathFor(k, locale)}>{t.nav[k]}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <nav aria-label={t.footerLinks}>
+      <ul class="footer-links">
+        <li><a href={GAME.url} target="_blank" rel="noopener">{t.officialSite}</a></li>
+        <li><a href={GAME.itchUrl} target="_blank" rel="noopener">{t.itch}</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">{t.disclaimer}</p>
+    <p class="copy">© {year} {SITE_NAME}</p>
+  </div>
+</footer>

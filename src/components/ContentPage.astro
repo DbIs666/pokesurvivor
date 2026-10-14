@@ -1,0 +1,39 @@
+---
+/**
+ * Renders an inner page from src/content/pages/<locale>/<routeKey>.md.
+ * Children are rendered at a line containing only `<!-- tier-table -->` in the
+ * Markdown body if present (same split technique as HomePage's `<!-- game -->`),
+ * otherwise after the body. An optional `<!-- move-table -->` line (after the
+ * tier-table marker) renders the "move-table" named slot.
+ */
+import { getEntry } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import GameLinkCard from './GameLinkCard.astro';
+import type { Locale, RouteKey } from '../i18n';
+
+interface Props { locale: Locale; routeKey: RouteKey }
+const { locale, routeKey } = Astro.props;
+const entry = await getEntry('pages', `${locale}/${routeKey}`);
+if (!entry) throw new Error(`Missing content file: src/content/pages/${locale}/${routeKey}.md`);
+const d = entry.data;
+
+const SLOT_MARKER = /<!--\s*tier-table\s*-->/;
+const parts = (entry.rendered?.html ?? '').split(SLOT_MARKER);
+if (parts.length > 2) throw new Error(`${locale}/${routeKey}.md has more than one <!-- tier-table --> marker`);
+const [before, rest] = parts;
+const MOVE_MARKER = /<!--\s*move-table\s*-->/;
+const restParts = rest?.split(MOVE_MARKER) ?? [];
+if (restParts.length > 2) throw new Error(`${locale}/${routeKey}.md has more than one <!-- move-table --> marker`);
+const [middle, after] = restParts;
+---
+<PageLayout locale={locale} routeKey={routeKey} title={d.title} description={d.description}
+  heading={d.heading} breadcrumb={d.breadcrumb} updated={d.updated} published={d.published} faq={d.faq}
+  ogImage={d.ogImage} ogImageAlt={d.ogImageAlt}>
+  <slot name="head" slot="head" />
+  {d.gameCard && <GameLinkCard locale={locale} newTabFirst={d.gameCardNewTab} />}
+  <Fragment set:html={before} />
+  <slot />
+  {middle !== undefined && <Fragment set:html={middle} />}
+  {after !== undefined && <slot name="move-table" />}
+  {after !== undefined && <Fragment set:html={after} />}
+</PageLayout>

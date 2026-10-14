@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { UI, ROUTES } from '../i18n';
+// Single 404 for both locales (Workers serves /404.html for any miss).
+const en = UI.en, zh = UI.zh;
+---
+<BaseLayout locale="en" title={en.notFoundTitle} description={en.notFoundBody} noindex>
+  <div class="container prose not-found">
+    <h1>404 · {en.notFoundTitle}</h1>
+    <p>{en.notFoundBody} <a href={ROUTES.home.en}>{en.backHome}</a></p>
+    <p lang="zh-Hans">{zh.notFoundBody} <a href={ROUTES.home.zh}>{zh.backHome}</a></p>
+  </div>
+</BaseLayout>

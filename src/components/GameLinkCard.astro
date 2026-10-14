@@ -1,0 +1,32 @@
+---
+/**
+ * Compact "play the game" card for inner pages (no iframe, zero weight).
+ * Links to the home page embed and to the game in a new tab.
+ * Usage: <GameLinkCard locale="en" />  — or embed the full <GameEmbed locale="en" /> instead.
+ * `newTabFirst` makes "open in a new tab" the primary button (mobile page, where
+ * the official site in its own tab works better than the embed).
+ */
+import { GAME_EMBED_URL } from '../config';
+import { UI, ROUTES, type Locale } from '../i18n';
+
+interface Props { locale: Locale; newTabFirst?: boolean }
+const { locale, newTabFirst = false } = Astro.props;
+const t = UI[locale];
+---
+<aside class="game-card" aria-label={t.playNow}>
+  <p class="game-card-title">{t.playNow}</p>
+  <p>{newTabFirst ? t.playCardBodyMobile : t.playCardBody}</p>
+  <div class="game-actions">
+    {newTabFirst ? (
+      <>
+        <a class="btn" href={GAME_EMBED_URL} target="_blank" rel="noopener">{t.openNewTab}</a>
+        <a class="btn btn-ghost" href={ROUTES.home[locale]}>{t.playOnHome}</a>
+      </>
+    ) : (
+      <>
+        <a class="btn" href={ROUTES.home[locale]}>{t.playOnHome}</a>
+        <a class="btn btn-ghost" href={GAME_EMBED_URL} target="_blank" rel="noopener">{t.openNewTab}</a>
+      </>
+    )}
+  </div>
+</aside>

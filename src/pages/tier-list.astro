@@ -1,0 +1,19 @@
+---
+import ContentPage from '../components/ContentPage.astro';
+import TierTable from '../components/TierTable.astro';
+import MoveTable from '../components/MoveTable.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { TIER_ENTRIES, TIERS } from '../data/tiers';
+import { UI } from '../i18n';
+
+// ItemList in tier order (best first), ranked by mid game, the phase that decides most runs.
+const score = (e: (typeof TIER_ENTRIES)[number]) =>
+  TIERS.indexOf(e.tiers.mid) * 3 + TIERS.indexOf(e.tiers.early) + TIERS.indexOf(e.tiers.late);
+const ranked = [...TIER_ENTRIES].sort((a, b) => score(a) - score(b));
+---
+<ContentPage locale="en" routeKey="tier-list">
+  <JsonLd slot="head" type="ItemList" locale="en" name={UI.en.tierCaption}
+    items={ranked.map((e) => ({ name: e.name.en, image: e.sprite }))} />
+  <TierTable locale="en" entries={TIER_ENTRIES} caption={UI.en.tierCaption} />
+  <MoveTable slot="move-table" locale="en" entries={TIER_ENTRIES} />
+</ContentPage>

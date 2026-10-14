@@ -1,0 +1,110 @@
+---
+/**
+ * Emits one JSON-LD <script>. Supported types: WebSite, VideoGame, Article, FAQPage, BreadcrumbList, ItemList.
+ */
+import { SITE_NAME, SITE_ALT_NAMES, DEFAULT_OG_IMAGE, PUBLISHER_LOGO, GAME, AUTHOR } from '../config';
+import { LANG_TAG, type Locale } from '../i18n';
+
+type Props =
+  | { type: 'WebSite'; locale: Locale; description?: string }
+  | { type: 'VideoGame'; locale: Locale; image?: string }
+  | { type: 'Article'; locale: Locale; title: string; description: string; updated?: Date; published?: Date; image?: string }
+  | { type: 'FAQPage'; locale: Locale; faq: { q: string; a: string }[] }
+  | { type: 'BreadcrumbList'; locale: Locale; items: { name: string; path: string }[] }
+  | { type: 'ItemList'; locale: Locale; name: string; items: { name: string; image?: string }[]; ordered?: boolean };
+
+const props = Astro.props;
+const site = Astro.site!;
+const url = new URL(Astro.url.pathname, site).href;
+const inLanguage = LANG_TAG[props.locale];
+const isoDate = (d?: Date) => d?.toISOString().slice(0, 10);
+const org = { '@type': 'Organization', name: SITE_NAME, url: site.href };
+
+let data: Record<string, unknown>;
+switch (props.type) {
+  case 'WebSite':
+    // Google's site-name feature reads the WebSite on the root URL, so both locales use site.href.
+    data = {
+      '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, alternateName: SITE_ALT_NAMES,
+      url: site.href, inLanguage, description: props.description,
+    };
+    break;
+  case 'VideoGame':
+    // Only facts from docs/content-spec.md (official site, browser game, developer jpter78).
+    data = {
+      '@context': 'https://schema.org',
+      '@type': 'VideoGame',
+      name: GAME.name,
+      url: GAME.url,
+      description: GAME.description,
+      image: new URL(props.image ?? DEFAULT_OG_IMAGE, site).href,
+      genre: GAME.genre,
+      gamePlatform: GAME.platform,
+      operatingSystem: 'Any (web browser)',
+      applicationCategory: 'Game',
+      inLanguage: GAME.languages,
+      playMode: ['SinglePlayer', 'CoOp'],
+      numberOfPlayers: { '@type': 'QuantitativeValue', minValue: 1, maxValue: GAME.maxPlayers },
+      offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+      author: { '@type': 'Person', name: GAME.author },
+      sameAs: [GAME.itchUrl],
+    };
+    break;
+  case 'Article': {
+    const published = props.published ?? props.updated;
+    data = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: props.title,
+      description: props.description,
+      inLanguage,
+      mainEntityOfPage: url,
+      image: new URL(props.image ?? DEFAULT_OG_IMAGE, site).href,
+      ...(published ? { datePublished: isoDate(published) } : {}),
+      ...(props.updated ? { dateModified: isoDate(props.updated) } : {}),
+      author: { '@type': 'Organization', name: AUTHOR[props.locale], url: site.href },
+      publisher: { ...org, logo: { '@type': 'ImageObject', url: new URL(PUBLISHER_LOGO, site).href } },
+    };
+    break;
+  }
+  case 'FAQPage':
+    data = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      inLanguage,
+      mainEntity: props.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    };
+    break;
+  case 'BreadcrumbList':
+    data = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: props.items.map((it, i) => ({
+        '@type': 'ListItem', position: i + 1, name: it.name, item: new URL(it.path, site).href,
+      })),
+    };
+    break;
+  case 'ItemList':
+    data = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: props.name,
+      inLanguage,
+      itemListOrder: props.ordered === false ? 'https://schema.org/ItemListUnordered' : 'https://schema.org/ItemListOrderDescending',
+      numberOfItems: props.items.length,
+      itemListElement: props.items.map((it, i) => ({
+        '@type': 'ListItem', position: i + 1, name: it.name,
+        ...(it.image ? { image: new URL(it.image, site).href } : {}),
+      })),
+    };
+    break;
+}
+// Escape every "<" as a JSON unicode escape so content can never close the script tag.
+// The doubled backslash matters: a single one would be a JS escape that yields "<" again.
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+<script type="application/ld+json" set:html={json} />

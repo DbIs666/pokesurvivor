@@ -1,0 +1,96 @@
+---
+/**
+ * Full Pokédex grid: one section per region, one card per Pokémon (sprite,
+ * number, name, types, Starter/Legendary badge). All 966 cards are in the HTML
+ * (crawlable, works without JS); the small script only adds search + type filter.
+ */
+import { DEX, REGIONS, TYPES, type DexType } from '../data/dex';
+import { SPRITE_CREDIT } from '../data/tiers';
+import { UI, type Locale } from '../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = UI[locale];
+const d = t.dex;
+const typeName = (ty: DexType) => (locale === 'zh' ? TYPES[ty].zh : ty);
+const num = (id: number) => `#${String(id).padStart(3, '0')}`;
+---
+<section class="dex" data-dex>
+  <div class="dex-tools">
+    <label class="dex-field">
+      <span class="sr-only">{d.search}</span>
+      <input type="search" data-dex-q placeholder={d.search} autocomplete="off" />
+    </label>
+    <label class="dex-field">
+      <span class="sr-only">{d.type}</span>
+      <select data-dex-type>
+        <option value="">{d.allTypes}</option>
+        {(Object.keys(TYPES) as DexType[]).map((ty) => <option value={ty}>{typeName(ty)}</option>)}
+      </select>
+    </label>
+    <p class="dex-status" data-dex-status aria-live="polite"></p>
+  </div>
+
+  <nav class="dex-regions" aria-label={t.toc}>
+    {REGIONS.map((r) => <a href={`#${r.id}`}>{r.name[locale]}</a>)}
+  </nav>
+
+  {REGIONS.map((r) => {
+    const list = DEX.filter((p) => p.region === r.id);
+    const genLabel = locale === 'zh' ? `第 ${r.gen} 世代 · ${list.length} 只` : `Generation ${r.gen} · ${list.length} Pokémon`;
+    return (
+      <section class="dex-region" id={r.id} data-dex-region>
+        <h2>{r.name[locale]} <small>({genLabel})</small></h2>
+        <ul class="dex-grid">
+          {list.map((p) => (
+            <li class="dex-card" id={`p${p.id}`} data-id={p.id} data-name={`${p.name.en} ${p.name.zh}`.toLowerCase()} data-types={p.types.join(' ')}>
+              <img src={p.sprite} alt="" width="40" height="40" loading="lazy" decoding="async" />
+              <span class="dex-num">{num(p.id)}</span>
+              <span class="dex-name">{p.name[locale]}</span>
+              {locale === 'zh' && <span class="dex-alt" lang="en">{p.name.en}</span>}
+              <span class="dex-types">
+                {p.types.map((ty) => <i class="dex-type" style={`background:${TYPES[ty].color}`}>{typeName(ty)}</i>)}
+              </span>
+              {p.starter && <b class="dex-badge dex-starter">{d.starter}</b>}
+              {p.legendary && <b class="dex-badge dex-legendary">{d.legendary}</b>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  })}
+  <p class="dex-none" data-dex-none hidden>{d.none}</p>
+  <p class="sprite-credit">{t.spriteCredit[0]}<a href={SPRITE_CREDIT.url} rel="noopener">PMD SpriteCollab</a>{t.spriteCredit[1]}<a href={SPRITE_CREDIT.license} rel="noopener license">CC BY-NC 4.0</a>{t.spriteCredit[2]}</p>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-dex]');
+  if (root) {
+    const q = root.querySelector<HTMLInputElement>('[data-dex-q]')!;
+    const type = root.querySelector<HTMLSelectElement>('[data-dex-type]')!;
+    const status = root.querySelector<HTMLElement>('[data-dex-status]')!;
+    const none = root.querySelector<HTMLElement>('[data-dex-none]')!;
+    const cards = [...root.querySelectorAll<HTMLElement>('.dex-card')];
+    const regions = [...root.querySelectorAll<HTMLElement>('[data-dex-region]')];
+    const total = cards.length;
+    const apply = () => {
+      const raw = q.value.trim().toLowerCase();
+      // "#25", "025" or "25" match that Pokédex number exactly; anything else matches names
+      const numMatch = /^#?0*(\d+)$/.exec(raw);
+      const term = numMatch ? '' : raw;
+      const id = numMatch ? numMatch[1] : '';
+      const ty = type.value;
+      let shown = 0;
+      for (const c of cards) {
+        const ok = (!term || c.dataset.name!.includes(term)) && (!id || c.dataset.id === id) && (!ty || c.dataset.types!.split(' ').includes(ty));
+        c.hidden = !ok;
+        if (ok) shown++;
+      }
+      for (const r of regions) r.hidden = !r.querySelector('.dex-card:not([hidden])');
+      none.hidden = shown > 0;
+      status.textContent = raw || ty ? `${shown} / ${total}` : '';
+    };
+    q.addEventListener('input', apply);
+    type.addEventListener('change', apply);
+  }
+</script>

@@ -1,0 +1,9 @@
+---
+import { UI, LANG_TAG, type Locale } from '../i18n';
+import { AUTHOR } from '../config';
+interface Props { locale: Locale; date: Date }
+const { locale, date } = Astro.props;
+const iso = date.toISOString().slice(0, 10);
+const label = new Intl.DateTimeFormat(LANG_TAG[locale], { dateStyle: 'long', timeZone: 'UTC' }).format(date);
+---
+<p class="last-updated">{UI[locale].byline}: {AUTHOR[locale]} · {UI[locale].lastUpdated}: <time datetime={iso}>{label}</time></p>

@@ -1,0 +1,22 @@
+---
+import JsonLd from './JsonLd.astro';
+import { UI, ROUTES, type Locale, type RouteKey } from '../i18n';
+interface Props { locale: Locale; routeKey: RouteKey; title: string }
+const { locale, routeKey, title } = Astro.props;
+const t = UI[locale];
+const items = [
+  { name: t.breadcrumbHome, path: ROUTES.home[locale]! },
+  // Short nav label, not the full H1: keeps the crumb and BreadcrumbList name concise.
+  ...(routeKey === 'home' ? [] : [{ name: t.nav[routeKey] ?? title, path: ROUTES[routeKey][locale]! }]),
+];
+---
+<nav class="breadcrumb" aria-label={t.breadcrumbLabel}>
+  <ol>
+    {items.map((it, i) => (
+      <li>
+        {i === items.length - 1 ? <span aria-current="page">{it.name}</span> : <a href={it.path}>{it.name}</a>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<JsonLd type="BreadcrumbList" locale={locale} items={items} />

@@ -1,0 +1,73 @@
+---
+/**
+ * Click-to-load game embed. The 16:9 box (4:3 on narrow screens) holds a "Play"
+ * button; the iframe is only injected on click, so the game downloads nothing
+ * until the visitor asks for it. The box keeps its size, so there is no layout shift.
+ * Without JS the button stays hidden and the "open in new tab" links are the fallback.
+ * Narrow screens (<768px) get a prominent "open in new tab" button ABOVE the frame,
+ * since the game is landscape-only on mobile.
+ */
+import { GAME_EMBED_URL, GAME_EMBED_ALLOW } from '../config';
+import { UI, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  src?: string;
+  /** optional screenshot behind the Play button (path under /public, 16:9, e.g. 1280×720) */
+  poster?: string;
+  posterAlt?: string;
+}
+const { locale, src = GAME_EMBED_URL, poster, posterAlt } = Astro.props;
+if (poster && !posterAlt) throw new Error('GameEmbed: posterAlt is required when poster is set');
+const t = UI[locale];
+---
+<section class="game-embed" aria-label={t.gameTitle}>
+  <div class="game-mobile-cta">
+    <a class="btn btn-block" href={src} target="_blank" rel="noopener">{t.openNewTab}</a>
+    <p class="game-hint">{t.landscapeHint}</p>
+  </div>
+  <div class="game-frame" data-game-frame data-src={src} data-title={t.gameTitle} data-allow={GAME_EMBED_ALLOW}>
+    <div class="game-poster">
+      {poster && (
+        <img src={poster} alt={posterAlt} width="1280" height="720" fetchpriority="high" decoding="async" />
+      )}
+      <button type="button" class="btn game-play" data-game-play hidden>{t.playGame}</button>
+      <noscript><a class="btn" href={src} target="_blank" rel="noopener">{t.openNewTab}</a></noscript>
+    </div>
+  </div>
+  <div class="game-actions">
+    <button type="button" class="btn" data-game-fullscreen hidden>{t.fullscreen}</button>
+    <a class="btn btn-ghost game-newtab-desktop" href={src} target="_blank" rel="noopener">{t.openNewTab}</a>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-game-frame]').forEach((frame) => {
+    const embed = frame.closest('.game-embed');
+    const play = frame.querySelector<HTMLButtonElement>('[data-game-play]');
+    const fs = embed?.querySelector<HTMLButtonElement>('[data-game-fullscreen]');
+    const load = () => {
+      if (frame.querySelector('iframe')) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = frame.dataset.src!;
+      iframe.title = frame.dataset.title!;
+      iframe.allow = frame.dataset.allow!;
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.replaceChildren(iframe);
+      iframe.focus();
+    };
+    if (play) {
+      play.hidden = false;
+      play.addEventListener('click', load);
+    }
+    // Fullscreen loads the game first; hidden where the API is missing (new-tab link is the fallback).
+    if (fs && document.fullscreenEnabled) {
+      fs.hidden = false;
+      fs.addEventListener('click', () => {
+        if (document.fullscreenElement) return void document.exitFullscreen();
+        load();
+        frame.requestFullscreen().catch(() => {});
+      });
+    }
+  });
+</script>

@@ -1,0 +1,72 @@
+---
+/**
+ * Tier table. Each Pokémon's note is visible text under its name (readable on
+ * touch screens and by screen readers, unlike a title attribute).
+ * The page's "Last updated" line comes from PageLayout, so none is rendered here.
+ */
+import { TIERS, PHASES, UNRANKED, SPRITE_CREDIT, type TierEntry } from '../data/tiers';
+import { UI, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  entries: TierEntry[];
+  /** localized table caption (also labels the scroll region) */
+  caption: string;
+}
+const { locale, entries, caption } = Astro.props;
+const t = UI[locale];
+const cell = (tier: (typeof TIERS)[number], phase: (typeof PHASES)[number]) =>
+  entries.filter((e) => e.tiers[phase] === tier);
+---
+<section class="tier-table-wrap">
+  <div class="table-scroll" tabindex="0" role="region" aria-label={caption}>
+    <table class="tier-table">
+      <caption>{caption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{t.tier}</th>
+          {PHASES.map((p) => <th scope="col">{t.phases[p]}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {TIERS.map((tier) => (
+          <tr>
+            <th scope="row" class={`tier-badge tier-${tier.toLowerCase()}`}>{tier}</th>
+            {PHASES.map((p) => (
+              <td>
+                <ul class="tier-cell">
+                  {cell(tier, p).map((e) => (
+                    <li>
+                      <img class="tier-sprite" src={e.sprite} alt="" width="40" height="40" loading="lazy" decoding="async" />
+                      <span class="tier-text">
+                        <span class="tier-name">{e.name[locale]}</span>
+                        {e.note && <span class="tier-note">{e.note[locale]}</span>}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </td>
+            ))}
+          </tr>
+        ))}
+        <tr>
+          <th scope="row" class="tier-badge tier-unranked">{t.unranked}</th>
+          <td colspan={PHASES.length}>
+            <ul class="tier-cell tier-cell-row">
+              {UNRANKED.map((e) => (
+                <li>
+                  <img class="tier-sprite" src={e.sprite} alt="" width="40" height="40" loading="lazy" decoding="async" />
+                  <span class="tier-text">
+                    <span class="tier-name">{e.name[locale]}</span>
+                    <span class="tier-note">{t.unrankedNote}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sprite-credit">{t.spriteCredit[0]}<a href={SPRITE_CREDIT.url} rel="noopener">PMD SpriteCollab</a>{t.spriteCredit[1]}<a href={SPRITE_CREDIT.license} rel="noopener license">CC BY-NC 4.0</a>{t.spriteCredit[2]}</p>
+</section>

@@ -1,0 +1,50 @@
+---
+/**
+ * Starting-move tier table: our S-C tier per starting move, its evolution and
+ * required card (official moves list), and sprites of the starters that use it.
+ */
+import { MOVES, TIERS, type MoveId, type TierEntry } from '../data/tiers';
+import { UI, type Locale } from '../i18n';
+
+interface Props { locale: Locale; entries: TierEntry[] }
+const { locale, entries } = Astro.props;
+const t = UI[locale];
+const ids = (Object.keys(MOVES) as MoveId[]).sort(
+  (a, b) => TIERS.indexOf(MOVES[a].tier) - TIERS.indexOf(MOVES[b].tier),
+);
+---
+<div class="table-scroll" tabindex="0" role="region" aria-label={t.moveCaption}>
+  <table class="tier-table move-table">
+    <caption>{t.moveCaption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{t.moveCols.tier}</th>
+        <th scope="col">{t.moveCols.move}</th>
+        <th scope="col">{t.moveCols.evolution}</th>
+        <th scope="col">{t.moveCols.card}</th>
+        <th scope="col">{t.moveCols.users}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {ids.map((id) => {
+        const m = MOVES[id];
+        const users = entries.filter((e) => e.move === id);
+        return (
+          <tr>
+            <th scope="row" class={`tier-badge tier-${m.tier.toLowerCase()}`}>{m.tier}</th>
+            <td><strong>{m.name[locale]}</strong></td>
+            <td>{m.evolution[locale]}<span class="tier-note">{m.effect[locale]}</span></td>
+            <td>{m.card}</td>
+            <td>
+              <span class="move-sprites">
+                {users.map((e) => (
+                  <img src={e.sprite} alt={e.name[locale]} title={e.name[locale]} width="32" height="32" loading="lazy" decoding="async" />
+                ))}
+              </span>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>

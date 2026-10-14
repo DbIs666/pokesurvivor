@@ -1,0 +1,45 @@
+---
+/**
+ * Standard inner page: breadcrumb, H1, optional "last updated", markdown body,
+ * optional FAQ, plus Article/FAQPage JSON-LD.
+ */
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import JsonLd from '../components/JsonLd.astro';
+import Faq from '../components/Faq.astro';
+import LastUpdated from '../components/LastUpdated.astro';
+import { type Locale, type RouteKey } from '../i18n';
+
+export interface Props {
+  locale: Locale;
+  routeKey: RouteKey;
+  title: string;
+  description: string;
+  heading?: string;
+  /** short breadcrumb label (defaults to heading/title) */
+  breadcrumb?: string;
+  updated?: Date;
+  published?: Date;
+  faq?: { q: string; a: string }[];
+  /** page-specific share image (path under /public) and its alt text */
+  ogImage?: string;
+  ogImageAlt?: string;
+}
+const { locale, routeKey, title, description, heading, breadcrumb, updated, published, faq, ogImage, ogImageAlt } = Astro.props;
+---
+<BaseLayout locale={locale} routeKey={routeKey} title={title} description={description} ogType="article"
+  modified={updated} ogImage={ogImage} ogImageAlt={ogImageAlt}>
+  <JsonLd slot="head" type="Article" locale={locale} title={heading ?? title} description={description}
+    updated={updated} published={published} image={ogImage} />
+  <slot name="head" slot="head" />
+  {faq && faq.length > 0 && <JsonLd slot="head" type="FAQPage" locale={locale} faq={faq} />}
+  <div class="container">
+    <Breadcrumb locale={locale} routeKey={routeKey} title={breadcrumb ?? heading ?? title} />
+    <article class="prose">
+      <h1>{heading ?? title}</h1>
+      {updated && <LastUpdated locale={locale} date={updated} />}
+      <slot />
+      {faq && faq.length > 0 && <Faq locale={locale} items={faq} />}
+    </article>
+  </div>
+</BaseLayout>

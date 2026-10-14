@@ -1,0 +1,14 @@
+---
+import { UI, type Locale } from '../i18n';
+interface Props { locale: Locale; items: { q: string; a: string }[] }
+const { locale, items } = Astro.props;
+---
+<section class="faq" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">{UI[locale].faq}</h2>
+  {items.map((f) => (
+    <details>
+      <summary>{f.q}</summary>
+      <p>{f.a}</p>
+    </details>
+  ))}
+</section>

@@ -1,0 +1,49 @@
+---
+/**
+ * Home page: copy from src/content/pages/<locale>/home.md, game embed in between.
+ * The Markdown body is split on a line containing only `<!-- game -->`:
+ * everything before it is shown above the iframe, everything after it below.
+ * Both parts support full Markdown (H2, lists, tables, links).
+ */
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GameEmbed from './GameEmbed.astro';
+import JsonLd from './JsonLd.astro';
+import Faq from './Faq.astro';
+import LastUpdated from './LastUpdated.astro';
+import { GAME_ORIGIN } from '../config';
+import type { Locale } from '../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const entry = await getEntry('pages', `${locale}/home`);
+if (!entry) throw new Error(`Missing content file: src/content/pages/${locale}/home.md`);
+const d = entry.data;
+
+const GAME_MARKER = /<!--\s*game\s*-->/;
+const html = entry.rendered?.html ?? '';
+const parts = html.split(GAME_MARKER);
+if (parts.length > 2) throw new Error(`home.md (${locale}) has more than one <!-- game --> marker`);
+const [above, below = ''] = parts;
+---
+<BaseLayout locale={locale} routeKey="home" title={d.title} description={d.description}
+  ogImage={d.ogImage} ogImageAlt={d.ogImageAlt}>
+  <link slot="head" rel="preconnect" href={GAME_ORIGIN} />
+  <JsonLd slot="head" type="WebSite" locale={locale} description={d.description} />
+  <JsonLd slot="head" type="VideoGame" locale={locale} image={d.poster} />
+  {d.faq && d.faq.length > 0 && <JsonLd slot="head" type="FAQPage" locale={locale} faq={d.faq} />}
+  <div class="container">
+    <section class="hero prose">
+      <h1>{d.heading ?? d.title}</h1>
+      {d.updated && <LastUpdated locale={locale} date={d.updated} />}
+      <Fragment set:html={above} />
+    </section>
+    <GameEmbed locale={locale} poster={d.poster} posterAlt={d.posterAlt} />
+    {below.trim() && (
+      <section class="prose below-embed">
+        <Fragment set:html={below} />
+      </section>
+    )}
+    {d.faq && d.faq.length > 0 && <div class="prose"><Faq locale={locale} items={d.faq} /></div>}
+  </div>
+</BaseLayout>

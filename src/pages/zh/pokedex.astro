@@ -1,0 +1,11 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import Pokedex from '../../components/Pokedex.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { DEX } from '../../data/dex';
+---
+<ContentPage locale="zh" routeKey="pokedex">
+  <JsonLd slot="head" type="ItemList" locale="zh" name="PokeSurvivor 全部 966 只可用宝可梦"
+    items={DEX.map((p) => ({ name: p.name.zh, image: p.sprite }))} ordered={false} />
+  <Pokedex locale="zh" />
+</ContentPage>

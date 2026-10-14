@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_NAME, TITLE_SUFFIX, DEFAULT_OG_IMAGE, OG_IMAGE_SIZE } from '../config';
+import { UI, LANG_TAG, alternatesFor, type Locale, type RouteKey } from '../i18n';
+
+export interface Props {
+  locale: Locale;
+  /** route key from src/i18n.ts; omit for pages outside the route table (404) */
+  routeKey?: RouteKey;
+  title: string;
+  description: string;
+  ogImage?: string;
+  /** og:image:alt / twitter:image:alt (defaults to the site name) */
+  ogImageAlt?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  /** article pages: last content change, emitted as article:modified_time */
+  modified?: Date;
+}
+
+const {
+  locale, routeKey, title, description, ogImage = DEFAULT_OG_IMAGE, ogImageAlt = SITE_NAME,
+  ogType = 'website', noindex = false, modified,
+} = Astro.props;
+
+const site = Astro.site!;
+const canonical = new URL(Astro.url.pathname, site).href;
+const alternates = routeKey ? alternatesFor(routeKey) : [];
+// hreflang only when a counterpart exists in the other locale
+const showHreflang = alternates.length > 1;
+const xDefault = alternates.find((a) => a.locale === 'en') ?? alternates[0];
+// No suffix when the title already names the game ("PokeSurvivor" / "Poke Survivor", any case);
+// otherwise append the short suffix to keep titles within ~60 chars.
+const fullTitle = /poke\s?survivor/i.test(title) ? title : `${title}${TITLE_SUFFIX}`;
+const ogImageUrl = new URL(ogImage, site).href;
+const ogLocale = locale === 'zh' ? 'zh_CN' : 'en_US';
+---
+<!doctype html>
+<html lang={LANG_TAG[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {showHreflang && alternates.map((a) => (
+      <link rel="alternate" hreflang={LANG_TAG[a.locale]} href={new URL(a.path, site).href} />
+    ))}
+    {showHreflang && xDefault && <link rel="alternate" hreflang="x-default" href={new URL(xDefault.path, site).href} />}
+    <meta name="theme-color" content="#0f1020" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content={String(OG_IMAGE_SIZE.width)} />
+    <meta property="og:image:height" content={String(OG_IMAGE_SIZE.height)} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:locale" content={ogLocale} />
+    {showHreflang && alternates.filter((a) => a.locale !== locale).map((a) => (
+      <meta property="og:locale:alternate" content={a.locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    ))}
+    {ogType === 'article' && modified && <meta property="article:modified_time" content={modified.toISOString()} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{UI[locale].skip}</a>
+    <Header locale={locale} routeKey={routeKey} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>
