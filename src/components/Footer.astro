@@ -1,6 +1,6 @@
 ---
 import { UI, NAV, pathFor, type Locale } from '../i18n';
-import { GAME, SITE_NAME } from '../config';
+import { GAME, SITE_NAME, SITE_REPO } from '../config';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = UI[locale];
@@ -19,6 +19,7 @@ const year = new Date().getFullYear();
       <ul class="footer-links">
         <li><a href={GAME.url} target="_blank" rel="noopener">{t.officialSite}</a></li>
         <li><a href={GAME.itchUrl} target="_blank" rel="noopener">{t.itch}</a></li>
+        <li><a href={SITE_REPO} target="_blank" rel="noopener">GitHub</a></li>
       </ul>
     </nav>
     <p class="disclaimer">{t.disclaimer}</p>

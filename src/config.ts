@@ -35,6 +35,9 @@ export const GAME = {
 
 export const SITE_NAME = 'Poke Survivor Online';
 
+/** This site's source repository. */
+export const SITE_REPO = 'https://github.com/DbIs666/pokesurvivor';
+
 /** Byline and Article JSON-LD author, per locale. */
 export const AUTHOR = { en: 'PokeSurvivor Fans', zh: 'PokeSurvivor 爱好者' } as const;
 
