@@ -168,6 +168,8 @@ h2 { font-size: clamp(1.3rem, 3.5vw, 1.75rem); margin-top: 2rem; color: var(--ac
 .site-footer { margin-top: 3rem; border-top: 1px solid var(--border); background: var(--bg-2); padding-block: 1.5rem; font-size: 0.85rem; color: var(--muted); }
 .footer-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
 .footer-links a { display: inline-block; padding-block: 0.6rem; }
+.friend-links { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.friend-links img { display: block; max-width: 100%; height: auto; }
 .not-found { padding-block: 3rem; }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
