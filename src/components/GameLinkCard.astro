@@ -6,12 +6,13 @@
  * `newTabFirst` makes "open in a new tab" the primary button (mobile page, where
  * the official site in its own tab works better than the embed).
  */
-import { GAME_EMBED_URL } from '../config';
+import { GAME_EMBED_URLS } from '../config';
 import { UI, ROUTES, type Locale } from '../i18n';
 
 interface Props { locale: Locale; newTabFirst?: boolean }
 const { locale, newTabFirst = false } = Astro.props;
 const t = UI[locale];
+const gameUrl = GAME_EMBED_URLS[locale];
 ---
 <aside class="game-card" aria-label={t.playNow}>
   <p class="game-card-title">{t.playNow}</p>
@@ -19,13 +20,13 @@ const t = UI[locale];
   <div class="game-actions">
     {newTabFirst ? (
       <>
-        <a class="btn" href={GAME_EMBED_URL} target="_blank" rel="noopener">{t.openNewTab}</a>
+        <a class="btn" href={gameUrl} target="_blank" rel="noopener">{t.openNewTab}</a>
         <a class="btn btn-ghost" href={ROUTES.home[locale]}>{t.playOnHome}</a>
       </>
     ) : (
       <>
         <a class="btn" href={ROUTES.home[locale]}>{t.playOnHome}</a>
-        <a class="btn btn-ghost" href={GAME_EMBED_URL} target="_blank" rel="noopener">{t.openNewTab}</a>
+        <a class="btn btn-ghost" href={gameUrl} target="_blank" rel="noopener">{t.openNewTab}</a>
       </>
     )}
   </div>

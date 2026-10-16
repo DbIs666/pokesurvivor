@@ -92,7 +92,7 @@ faq:
 
 - **搜不到好友**：检查昵称有没有拼错，确认对方已经登录。游客没有账号，加不了。
 - **提示「There's no player with that nickname」**：昵称要一字不差。让朋友从好友页面把自己的昵称复制给你。
-- **提示「Can't connect to one of your friends」**：你或对方的网络不支持组队。让其中一人换个 Wi-Fi 或改用移动数据，游戏会自己重连。
+- **提示「Can't connect to one of your friends: their network (or yours) doesn't allow group play. Try another Wi-Fi or mobile data; it retries automatically.」**：你或对方的网络不支持组队。引号里是完整的游戏提示。让其中一人换个 Wi-Fi 或改用移动数据，然后等一会儿；游戏会自己重连。
 - **提示「The invite has expired」**：邀请只有 3 分钟有效，让房主重新发一次。
 - **提示「That room's game has already started」**：对局开始后就进不去了，等下一局。
 - **提示「The room is full」**：一个房间最多 4 人。

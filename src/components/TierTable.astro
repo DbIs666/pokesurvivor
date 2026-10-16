@@ -49,22 +49,24 @@ const cell = (tier: (typeof TIERS)[number], phase: (typeof PHASES)[number]) =>
             ))}
           </tr>
         ))}
-        <tr>
-          <th scope="row" class="tier-badge tier-unranked">{t.unranked}</th>
-          <td colspan={PHASES.length}>
-            <ul class="tier-cell tier-cell-row">
-              {UNRANKED.map((e) => (
-                <li>
-                  <img class="tier-sprite" src={e.sprite} alt="" width="40" height="40" loading="lazy" decoding="async" />
-                  <span class="tier-text">
-                    <span class="tier-name">{e.name[locale]}</span>
-                    <span class="tier-note">{t.unrankedNote}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </td>
-        </tr>
+        {UNRANKED.length > 0 && (
+          <tr>
+            <th scope="row" class="tier-badge tier-unranked">{t.unranked}</th>
+            <td colspan={PHASES.length}>
+              <ul class="tier-cell tier-cell-row">
+                {UNRANKED.map((e) => (
+                  <li>
+                    <img class="tier-sprite" src={e.sprite} alt="" width="40" height="40" loading="lazy" decoding="async" />
+                    <span class="tier-text">
+                      <span class="tier-name">{e.name[locale]}</span>
+                      <span class="tier-note">{t.unrankedNote}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   </div>

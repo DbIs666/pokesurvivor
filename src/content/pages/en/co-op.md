@@ -92,7 +92,7 @@ These steps follow from the rules above; the developer hasn't published a troubl
 
 - **Can't find a friend:** check the nickname spelling, and make sure they are logged in. Guests have no account for you to add.
 - **"There's no player with that nickname":** nicknames must match exactly. Ask your friend to copy theirs from the Friends screen.
-- **"Can't connect to one of your friends":** their network or yours blocks group play. Switch one of you to another Wi-Fi or to mobile data; the game retries on its own.
+- **"Can't connect to one of your friends: their network (or yours) doesn't allow group play. Try another Wi-Fi or mobile data; it retries automatically."** This is the full in-game message. Switch one of you to another Wi-Fi or to mobile data and wait; the game retries on its own.
 - **"The invite has expired":** invites last 3 minutes. Ask the host to send a new one.
 - **"That room's game has already started":** you can't join a run in progress. Wait for the next one.
 - **"The room is full":** a room holds 4 players at most.

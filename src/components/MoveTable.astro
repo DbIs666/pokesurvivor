@@ -34,7 +34,7 @@ const ids = (Object.keys(MOVES) as MoveId[]).sort(
             <th scope="row" class={`tier-badge tier-${m.tier.toLowerCase()}`}>{m.tier}</th>
             <td><strong>{m.name[locale]}</strong></td>
             <td>{m.evolution[locale]}<span class="tier-note">{m.effect[locale]}</span></td>
-            <td>{m.card}</td>
+            <td>{m.card[locale]}</td>
             <td>
               <span class="move-sprites">
                 {users.map((e) => (

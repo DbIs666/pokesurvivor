@@ -12,7 +12,16 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = UI[locale];
 const d = t.dex;
-const typeName = (ty: DexType) => (locale === 'zh' ? TYPES[ty].zh : ty);
+// en shows the English type key; zh/es use the localized TYPES field.
+const typeName = (ty: DexType) => (locale === 'en' ? ty : TYPES[ty][locale]);
+// Species names: es uses the game's Spanish name (= English except 14 species, see ES_NAMES in dex.ts).
+const nameOf = (p: (typeof DEX)[number]) => (locale === 'zh' ? p.name.zh : locale === 'es' ? p.name.es : p.name.en);
+// Secondary English name: always on zh, and on es only where the Spanish name differs.
+const altOf = (p: (typeof DEX)[number]) => (locale === 'zh' || (locale === 'es' && p.name.es !== p.name.en) ? p.name.en : '');
+// Search text: the displayed name plus the English name, so both match.
+// Accents are stripped (same in the script) so «codigo cero» matches «Código Cero».
+const fold = (x: string) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const searchOf = (p: (typeof DEX)[number]) => fold([...new Set([p.name.en, nameOf(p)])].join(' '));
 const num = (id: number) => `#${String(id).padStart(3, '0')}`;
 ---
 <section class="dex" data-dex>
@@ -37,17 +46,17 @@ const num = (id: number) => `#${String(id).padStart(3, '0')}`;
 
   {REGIONS.map((r) => {
     const list = DEX.filter((p) => p.region === r.id);
-    const genLabel = locale === 'zh' ? `第 ${r.gen} 世代 · ${list.length} 只` : `Generation ${r.gen} · ${list.length} Pokémon`;
+    const genLabel = locale === 'zh' ? `第 ${r.gen} 世代 · ${list.length} 只` : `${d.gen} ${r.gen} · ${list.length} ${d.count}`;
     return (
       <section class="dex-region" id={r.id} data-dex-region>
         <h2>{r.name[locale]} <small>({genLabel})</small></h2>
         <ul class="dex-grid">
           {list.map((p) => (
-            <li class="dex-card" id={`p${p.id}`} data-id={p.id} data-name={`${p.name.en} ${p.name.zh}`.toLowerCase()} data-types={p.types.join(' ')}>
+            <li class="dex-card" id={`p${p.id}`} data-id={p.id} data-name={searchOf(p)} data-types={p.types.join(' ')}>
               <img src={p.sprite} alt="" width="40" height="40" loading="lazy" decoding="async" />
               <span class="dex-num">{num(p.id)}</span>
-              <span class="dex-name">{p.name[locale]}</span>
-              {locale === 'zh' && <span class="dex-alt" lang="en">{p.name.en}</span>}
+              <span class="dex-name">{nameOf(p)}</span>
+              {altOf(p) && <span class="dex-alt" lang="en">{altOf(p)}</span>}
               <span class="dex-types">
                 {p.types.map((ty) => <i class="dex-type" style={`background:${TYPES[ty].color}`}>{typeName(ty)}</i>)}
               </span>
@@ -74,7 +83,7 @@ const num = (id: number) => `#${String(id).padStart(3, '0')}`;
     const regions = [...root.querySelectorAll<HTMLElement>('[data-dex-region]')];
     const total = cards.length;
     const apply = () => {
-      const raw = q.value.trim().toLowerCase();
+      const raw = q.value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       // "#25", "025" or "25" match that Pokédex number exactly; anything else matches names
       const numMatch = /^#?0*(\d+)$/.exec(raw);
       const term = numMatch ? '' : raw;

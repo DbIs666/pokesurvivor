@@ -24,7 +24,7 @@ How to play PokeSurvivor in one sentence: you only move, and your partner Pokém
 ## Before you start
 
 - **Guest or account:** a guest saves nothing outside the browser. An account (name and password, or Google) gives you a cloud save.
-- **Language:** the game picks English or Spanish from your browser language. You can change it in Settings.
+- **Language:** the first time you play, the game shows Spanish if your browser is set to Spanish and English otherwise. You can switch in Settings > Graphics > Language; the game reloads and remembers your choice.
 - **Partner:** new players take a short personality quiz that suggests a partner. You can accept it or choose another.
 
 ## PokeSurvivor controls
@@ -98,7 +98,7 @@ This stretch is where the run takes shape. Our approach (our advice, not an offi
 ## Minutes 5–10: first evolution and first rift
 
 - **Evolve your main move.** Once it is level 5 and you hold its upgrade card, a golden evolution card appears. Take it.
-- **Expect a rift.** A Mysterious Rift opens at least every 2.5 minutes, so you will likely see one before minute 10. If your build feels strong, step in; if you are struggling, it is fine to skip it for now.
+- **Expect a rift.** A Mysterious Rift opens at most 2.5 minutes apart, so you will likely see one before minute 10. If your build feels strong, step in; if you are struggling, it is fine to skip it for now.
 - **Keep moving.** The horde grows, and standing still to finish a fight is how most early runs end. Players on the [itch.io community board](https://jpter78.itch.io/pokesurvivor/community) have said the difficulty ramps up fast and enemies get tanky early, so an evolved main move by this point matters.
 
 What comes later: rifts and bosses fill the middle of a run, and at minute 30 Arceus starts an invincible chase (see the FAQ below).
@@ -180,7 +180,7 @@ Sand and snow chip damage never knocks you out by itself. Practical rule: when t
 
 ## Your first rift
 
-A Mysterious Rift opens on the map at least every 2.5 minutes. Step in to fight a legendary in an arena of its type. Win for a ×10 gacha ticket and a bond that links moves to one slot; lose and you return to the map with no reward. Details are in the [rifts and legendaries guide](/rifts/).
+A Mysterious Rift opens on the map at most 2.5 minutes apart. Step in to fight a legendary in an arena of its type. Win for a ×10 gacha ticket and a bond that links moves to one slot; lose and you return to the map with no reward. Details are in the [rifts and legendaries guide](/rifts/).
 
 <!-- IMAGE PLACEHOLDER 5: screenshot of a Mysterious Rift on the map.
      Suggested file: /images/how-to-play/mysterious-rift.webp

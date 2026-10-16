@@ -1,11 +1,14 @@
-export type Locale = 'en' | 'zh';
+export type Locale = 'en' | 'zh' | 'es';
 
-export const LOCALES: Locale[] = ['en', 'zh'];
+export const LOCALES: Locale[] = ['en', 'zh', 'es'];
 
 /** BCP 47 tag used for <html lang> and hreflang. */
-export const LANG_TAG: Record<Locale, string> = { en: 'en', zh: 'zh-Hans' };
+export const LANG_TAG: Record<Locale, string> = { en: 'en', zh: 'zh-Hans', es: 'es' };
 
-export const LOCALE_LABEL: Record<Locale, string> = { en: 'English', zh: '简体中文' };
+/** Open Graph locale (og:locale / og:locale:alternate). */
+export const OG_LOCALE: Record<Locale, string> = { en: 'en_US', zh: 'zh_CN', es: 'es_ES' };
+
+export const LOCALE_LABEL: Record<Locale, string> = { en: 'English', zh: '简体中文', es: 'Español' };
 
 export type RouteKey =
   | 'home'
@@ -23,20 +26,21 @@ export type RouteKey =
  * All paths end with "/" (trailingSlash: 'always').
  */
 export const ROUTES: Record<RouteKey, Partial<Record<Locale, string>>> = {
-  home: { en: '/', zh: '/zh/' },
-  'tier-list': { en: '/tier-list/', zh: '/zh/tier-list/' },
-  'best-pokemon': { en: '/best-pokemon/', zh: '/zh/best-pokemon/' },
-  'how-to-play': { en: '/how-to-play/', zh: '/zh/how-to-play/' },
-  'co-op': { en: '/co-op/', zh: '/zh/co-op/' },
-  rifts: { en: '/rifts/', zh: '/zh/rifts/' },
-  mobile: { en: '/mobile/', zh: '/zh/mobile/' },
-  pokedex: { en: '/pokedex/', zh: '/zh/pokedex/' },
+  home: { en: '/', zh: '/zh/', es: '/es/' },
+  'tier-list': { en: '/tier-list/', zh: '/zh/tier-list/', es: '/es/tier-list/' },
+  'best-pokemon': { en: '/best-pokemon/', zh: '/zh/best-pokemon/', es: '/es/best-pokemon/' },
+  'how-to-play': { en: '/how-to-play/', zh: '/zh/how-to-play/', es: '/es/how-to-play/' },
+  'co-op': { en: '/co-op/', zh: '/zh/co-op/', es: '/es/co-op/' },
+  rifts: { en: '/rifts/', zh: '/zh/rifts/', es: '/es/rifts/' },
+  mobile: { en: '/mobile/', zh: '/zh/mobile/', es: '/es/mobile/' },
+  pokedex: { en: '/pokedex/', zh: '/zh/pokedex/', es: '/es/pokedex/' },
 };
 
 /** Nav order per locale. */
 export const NAV: Record<Locale, RouteKey[]> = {
   en: ['home', 'tier-list', 'pokedex', 'best-pokemon', 'how-to-play', 'co-op', 'rifts', 'mobile'],
   zh: ['home', 'tier-list', 'pokedex', 'best-pokemon', 'how-to-play', 'co-op', 'rifts', 'mobile'],
+  es: ['home', 'tier-list', 'pokedex', 'best-pokemon', 'how-to-play', 'co-op', 'rifts', 'mobile'],
 };
 
 /** UI strings (chrome only; page copy lives in src/content/pages). */
@@ -134,6 +138,55 @@ export const UI = {
     notFoundTitle: '页面不存在',
     notFoundBody: '你访问的页面不存在。',
     backHome: '返回首页',
+  },
+  es: {
+    nav: {
+      home: 'Inicio', 'tier-list': 'Tier list', 'best-pokemon': 'Mejor inicial',
+      'how-to-play': 'Cómo jugar', 'co-op': 'Cooperativo', rifts: 'Grietas', mobile: 'Móvil', pokedex: 'Pokédex',
+    },
+    skip: 'Saltar al contenido',
+    menu: 'Menú',
+    mainNav: 'Principal',
+    breadcrumbHome: 'Inicio',
+    breadcrumbLabel: 'Ruta de navegación',
+    langSwitch: 'Idioma',
+    lastUpdated: 'Última actualización',
+    byline: 'Por',
+    fullscreen: 'Pantalla completa',
+    openNewTab: 'Abrir el juego en otra pestaña',
+    playNow: 'Juega a PokeSurvivor ahora',
+    playCardBody: 'Juega en el navegador desde la página de inicio o ábrelo en otra pestaña (el juego está en español).',
+    playCardBodyMobile: 'En el móvil, abre la web oficial en otra pestaña y pon el teléfono en horizontal (el juego está en español).',
+    playOnHome: 'Juega gratis a PokeSurvivor online',
+    landscapeHint: 'En el móvil, gira el dispositivo y juega en horizontal.',
+    gameTitle: 'Juego PokeSurvivor',
+    playGame: 'Jugar a PokeSurvivor',
+    tierCaption: 'Tier list de compañeros de PokeSurvivor por fase',
+    footerLinks: 'Enlaces del juego',
+    footerGuides: 'Guías',
+    officialSite: 'Web oficial (pokesurvivor.com)',
+    itch: 'PokeSurvivor en itch.io',
+    faq: 'Preguntas frecuentes',
+    tier: 'Tier',
+    phases: { early: 'Fase inicial', mid: 'Fase media', late: 'Fase final' },
+    unranked: 'Aún sin clasificar',
+    unrankedNote: 'Movimiento inicial sin confirmar',
+    // Rendered as: "Sprites: retratos de <PMD SpriteCollab>, con licencia <CC BY-NC 4.0>."
+    spriteCredit: ['Sprites: retratos de ', ', con licencia ', '.'],
+    moveCaption: 'Tier list de movimientos iniciales de PokeSurvivor',
+    moveCols: { move: 'Movimiento inicial', tier: 'Tier', evolution: 'Evoluciona a', card: 'Carta necesaria', users: 'Lo usan' },
+    toc: 'En esta página',
+    dex: {
+      search: 'Busca por nombre o número', type: 'Tipo', allTypes: 'Todos los tipos',
+      // Rendered as: "Generación 1 · 151 Pokémon"
+      starter: 'Inicial', legendary: 'Legendario', gen: 'Generación', count: 'Pokémon',
+      shown: 'mostrados', none: 'Ningún Pokémon coincide con estos filtros.', top: 'Volver a las regiones',
+    },
+    disclaimer:
+      'Sitio de fans no oficial. No está afiliado, patrocinado ni aprobado por Nintendo, Creatures Inc., GAME FREAK, The Pokémon Company ni el desarrollador de PokeSurvivor (jpter78). PokeSurvivor es obra de jpter78. Pokémon y los nombres relacionados son marcas de sus respectivos propietarios. El juego se juega en su web oficial, pokesurvivor.com.',
+    notFoundTitle: 'Página no encontrada',
+    notFoundBody: 'La página que buscas no existe.',
+    backHome: 'Volver al inicio',
   },
 } as const;
 

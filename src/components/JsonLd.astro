@@ -36,7 +36,7 @@ switch (props.type) {
       '@type': 'VideoGame',
       name: GAME.name,
       url: GAME.url,
-      description: GAME.description,
+      description: GAME.description[props.locale],
       image: new URL(props.image ?? DEFAULT_OG_IMAGE, site).href,
       genre: GAME.genre,
       gamePlatform: GAME.platform,

@@ -33,7 +33,7 @@ export default defineConfig({
   build: { format: 'directory' },
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh'],
+    locales: ['en', 'zh', 'es'],
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
@@ -41,7 +41,7 @@ export default defineConfig({
       filter: (page) => !page.includes('/404'),
       i18n: {
         defaultLocale: 'en',
-        locales: { en: 'en', zh: 'zh-Hans' },
+        locales: { en: 'en', zh: 'zh-Hans', es: 'es' },
       },
       serialize(item) {
         const lastmod = LASTMOD.get(new URL(item.url).pathname);

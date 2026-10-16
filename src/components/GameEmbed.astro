@@ -7,7 +7,7 @@
  * Narrow screens (<768px) get a prominent "open in new tab" button ABOVE the frame,
  * since the game is landscape-only on mobile.
  */
-import { GAME_EMBED_URL, GAME_EMBED_ALLOW } from '../config';
+import { GAME_EMBED_URLS, GAME_EMBED_ALLOW } from '../config';
 import { UI, type Locale } from '../i18n';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
   poster?: string;
   posterAlt?: string;
 }
-const { locale, src = GAME_EMBED_URL, poster, posterAlt } = Astro.props;
+const { locale, src = GAME_EMBED_URLS[locale], poster, posterAlt } = Astro.props;
 if (poster && !posterAlt) throw new Error('GameEmbed: posterAlt is required when poster is set');
 const t = UI[locale];
 ---

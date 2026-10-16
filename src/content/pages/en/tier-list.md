@@ -1,15 +1,15 @@
 ---
-title: "PokeSurvivor Tier List (Oct 2026): Starters by Game Phase"
-description: "Data-based PokeSurvivor tier list: 25 starters ranked S to C for early, mid and late game, plus a tier list of every starting move. Updated 2026-10-14."
-heading: "PokeSurvivor Tier List (Updated 2026-10-14)"
-updated: 2026-10-14
+title: "PokeSurvivor Tier List (Oct 2026): All Starters by Phase"
+description: "Data-based PokeSurvivor tier list: all 29 starters ranked S to C for early, mid and late game, plus a tier list of every starting move. Updated 2026-10-16."
+heading: "PokeSurvivor Tier List (Updated 2026-10-16)"
+updated: 2026-10-16
 ogImage: "/og-tier-list.png"
 ogImageAlt: "PokeSurvivor tier list: starter partners ranked S to C by game phase"
 faq:
   - q: "Is this an official or community tier list?"
-    a: "Neither. The game launched on 2026-10-11 and we found no community tier list yet. This ranking is our assessment of starting stats and moves from the game data and the official moves list. It is not based on recorded test runs, and it will change as the game updates."
+    a: "Neither. The game is very new (the first official news post is from 2026-10-08) and we found no community tier list yet. This ranking is our assessment of starting stats and moves from the game data and the official moves list. It is not based on recorded test runs, and it will change as the game updates."
   - q: "How many Pokémon are ranked?"
-    a: "25 of the 29 starter partners. Squirtle, Psyduck, Piplup and Chespin are left out because their starting move isn't exposed in the client data we read, and we don't rank on a guess."
+    a: "All 29 starter partners. As of 2026-10-16 all starting moves are confirmed from the client data."
   - q: "Why are only starters ranked?"
     a: "Starters are the only partners with starting data we could check. Other partners come from the gacha, and we don't rank Pokémon we haven't checked."
   - q: "Which move is best in PokeSurvivor?"
@@ -22,7 +22,7 @@ faq:
     a: "Not confirmed. We have not found any source saying shinies differ in stats, so treat shiny as cosmetic until tested."
 ---
 
-This is our PokeSurvivor tier list for 25 of the 29 starter partners, ranked by game phase from the game's client data and the official moves list. Poke Survivor only came out on 2026-10-11, so the list is not official, no community consensus exists yet, and it is our assessment rather than results from recorded test runs. Squirtle, Psyduck, Piplup and Chespin are left out because their starting move isn't confirmed. If you just want a first partner, read our [best starter guide](/best-pokemon/) instead.
+This is our PokeSurvivor tier list for all 29 starter partners, ranked by game phase from the game's client data and the official moves list. Poke Survivor is very new (the first official news post is from 2026-10-08), so the list is not official, no community consensus exists yet, and it is our assessment rather than results from recorded test runs. If you just want a first partner, read our [best starter guide](/best-pokemon/) instead.
 
 On this page:
 
@@ -44,7 +44,7 @@ What the tiers mean:
 - **B:** usable, with a clear weakness.
 - **C:** not recommended as your main partner in that phase.
 
-Each card shows the Pokémon's sprite, its starting move and its key stat. The 4 starters we haven't ranked are shown in a "Not yet ranked" row.
+Each card shows the Pokémon's sprite, its starting move and its key stat.
 
 <!-- tier-table -->
 
@@ -112,4 +112,5 @@ We only rank Pokémon whose starting data we have checked. Gacha partners will b
 
 ## Changelog
 
+- **2026-10-16:** Squirtle, Psyduck, Piplup and Chespin added to the tier list after their starting moves were confirmed from client data. All 29 starters now ranked.
 - **2026-10-14:** First version. 25 of 29 starters ranked from client data and the official moves list; Squirtle, Psyduck, Piplup and Chespin left out until their starting move is confirmed. Type coverage and co-op fit added as tiebreakers. Same day: added sprites to the tier cards, a "Not yet ranked" row for the 4 unranked starters, per-tier lists for mid and late game, the move tier list and the gacha partners section.

@@ -13,8 +13,6 @@ faq:
     a: "No. After the quiz suggests a partner you can accept it (\"Let's go together!\") or press \"Choose another\" and pick any of the 29 starters."
   - q: "Can I change my partner later?"
     a: "Yes. Your collection lets you choose which Pokémon you play as, normal or shiny, including ones you get from the gacha."
-  - q: "What starting move do Squirtle, Psyduck, Piplup and Chespin have?"
-    a: "From the game's client data (read 2026-10-14): Squirtle has Water Gun, Psyduck has Confusion, Piplup has Bubble and Chespin has Vine Whip. Squirtle has a low attack multiplier (0.97), so Mudkip or Sobble are better Water Gun picks."
   - q: "Do shiny starters have better stats?"
     a: "Not as far as we can tell. In the client data, a shiny partner is a separate collection entry you can switch to, and we found no stat change tied to it. Shiny wild enemies are different: they have double HP and give five times the XP. Treat shiny partners as cosmetic until the developer says otherwise."
   - q: "What is the best starter for co-op?"

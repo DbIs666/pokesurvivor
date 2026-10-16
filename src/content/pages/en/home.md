@@ -21,7 +21,7 @@ faq:
   - q: "Is my progress saved?"
     a: "With an account (name and password, or Google) your progress is saved to the cloud. As a guest nothing is saved outside your browser. If login doesn't work in the embed above, open the game in a new tab."
   - q: "What languages is the game in?"
-    a: "English and Spanish. The game picks one from your browser language, and you can change it in Settings. There is no Chinese version; our Chinese guide is at /zh/."
+    a: "English and Spanish. The first time you play, the game shows Spanish if your browser is set to Spanish and English otherwise. You can switch in Settings > Graphics > Language; the game reloads and remembers your choice. There is no Chinese version; our Chinese guide is at /zh/."
 ---
 
 PokeSurvivor (also written Poke Survivor) is a free, fan-made Pokémon survivors-like you can play right here. You only move; your partner Pokémon attacks automatically. Use WASD or the arrow keys on PC, or drag anywhere on a touch screen.
@@ -87,7 +87,7 @@ Stats come from the game's client data, read on 2026-10-14, and can change with 
 
 ## Mysterious Rifts and legendaries
 
-A rift opens on the map at least every 2.5 minutes. Walk into it to fight a legendary in an arena of its type, each with its own terrain and weather: lava burns, ice is slippery and water slows you down. There are 87 legendaries and 18 arenas, from the Igneous Volcano to the Enchanted Forest.
+A rift opens on the map at most 2.5 minutes apart. Walk into it to fight a legendary in an arena of its type, each with its own terrain and weather: lava burns, ice is slippery and water slows you down. There are 87 legendaries and 18 arenas, from the Igneous Volcano to the Enchanted Forest.
 
 - **Win:** a ×10 gacha ticket and a bond. A bond links two moves so they fire together from one slot, up to four bonds.
 - **Lose:** you return to the map with no reward and the run continues.
@@ -121,7 +121,7 @@ Searching for "Pokemon Survivor"? Several fan games use similar names. This site
 The game is updated almost daily. Recent changes from the [official news page](https://pokesurvivor.com/en/news/):
 
 - **2026-10-13:** at minute 30, Arceus takes you to the Ruins of Judgment for an invincible chase.
-- **2026-10-12:** rifts appear at least every 2.5 minutes, and missing legendaries show up more often. iPhone fixes. Healer healing now has a cap.
+- **2026-10-12:** at most 2.5 minutes pass between rifts, and missing legendaries show up more often. iPhone fixes. Healer healing now has a cap.
 - **2026-10-11:** bonds added. Each rift legendary you defeat links two moves into one slot.
 - **2026-10-10:** bosses and legendaries got four telegraphed attacks and an enrage at half health.
 - **2026-10-09:** new settings screen with automatic graphics quality, and fewer but stronger enemies on screen.

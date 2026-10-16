@@ -3,7 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_NAME, TITLE_SUFFIX, DEFAULT_OG_IMAGE, OG_IMAGE_SIZE } from '../config';
-import { UI, LANG_TAG, alternatesFor, type Locale, type RouteKey } from '../i18n';
+import { UI, LANG_TAG, OG_LOCALE, alternatesFor, type Locale, type RouteKey } from '../i18n';
 
 export interface Props {
   locale: Locale;
@@ -28,21 +28,21 @@ const {
 const site = Astro.site!;
 const canonical = new URL(Astro.url.pathname, site).href;
 const alternates = routeKey ? alternatesFor(routeKey) : [];
-// hreflang only when a counterpart exists in the other locale
+// hreflang only when a counterpart exists in another locale
 const showHreflang = alternates.length > 1;
 const xDefault = alternates.find((a) => a.locale === 'en') ?? alternates[0];
 // No suffix when the title already names the game ("PokeSurvivor" / "Poke Survivor", any case);
 // otherwise append the short suffix to keep titles within ~60 chars.
 const fullTitle = /poke\s?survivor/i.test(title) ? title : `${title}${TITLE_SUFFIX}`;
 const ogImageUrl = new URL(ogImage, site).href;
-const ogLocale = locale === 'zh' ? 'zh_CN' : 'en_US';
+const ogLocale = OG_LOCALE[locale];
 ---
 <!doctype html>
 <html lang={LANG_TAG[locale]}>
   <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K40BJ4VY01"></script>
-    <script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -74,7 +74,7 @@ const ogLocale = locale === 'zh' ? 'zh_CN' : 'en_US';
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:locale" content={ogLocale} />
     {showHreflang && alternates.filter((a) => a.locale !== locale).map((a) => (
-      <meta property="og:locale:alternate" content={a.locale === 'zh' ? 'zh_CN' : 'en_US'} />
+      <meta property="og:locale:alternate" content={OG_LOCALE[a.locale]} />
     ))}
     {ogType === 'article' && modified && <meta property="article:modified_time" content={modified.toISOString()} />}
     <meta name="twitter:card" content="summary_large_image" />
